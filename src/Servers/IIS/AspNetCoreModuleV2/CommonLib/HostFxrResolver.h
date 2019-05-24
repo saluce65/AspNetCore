@@ -22,6 +22,7 @@ public:
         const std::filesystem::path     &applicationPhysicalPath,
         const std::wstring              &applicationArguments,
         std::filesystem::path           &hostFxrDllPath,
+        std::filesystem::path           &dotnetExePath,
         std::vector<std::wstring>       &arguments
     );
 
