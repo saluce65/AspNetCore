@@ -55,14 +55,12 @@ TEST(ParseHostFxrArguments, ProvideNoArgs_InvalidArgs)
 {
     std::vector<std::wstring> bstrArray;
     std::filesystem::path struHostFxrDllLocation;
-    std::filesystem::path struExeLocation;
 
     EXPECT_THROW(HostFxrResolver::GetHostFxrParameters(
         L"dotnet", // processPath
         L"some\\path",  // application physical path, ignored.
         L"",  //arguments
         struHostFxrDllLocation,
-        struExeLocation,
         bstrArray), // args array.
         InvalidOperationException);
 }

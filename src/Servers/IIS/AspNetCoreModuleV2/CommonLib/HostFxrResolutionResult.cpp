@@ -19,19 +19,11 @@ void HostFxrResolutionResult::GetArguments(DWORD& hostfxrArgc, std::unique_ptr<P
 }
 
 HRESULT HostFxrResolutionResult::Create(
-        _In_ const std::wstring& pcwzDotnetExePath,
         _In_ const std::wstring& pcwzProcessPath,
         _In_ const std::wstring& pcwzApplicationPhysicalPath,
         _In_ const std::wstring& pcwzArguments,
         _Out_ std::unique_ptr<HostFxrResolutionResult>& ppWrapper)
 {
-    std::filesystem::path knownDotnetLocation;
-
-    if (!pcwzDotnetExePath.empty())
-    {
-        knownDotnetLocation = pcwzDotnetExePath;
-    }
-
     try
     {
         std::filesystem::path hostFxrDllPath;
@@ -41,15 +33,14 @@ HRESULT HostFxrResolutionResult::Create(
                 pcwzApplicationPhysicalPath,
                 pcwzArguments,
                 hostFxrDllPath,
-                knownDotnetLocation,
                 arguments);
 
-        LOG_INFOF(L"Parsed hostfxr options: dotnet location: '%ls' hostfxr path: '%ls' arguments:", knownDotnetLocation.c_str(), hostFxrDllPath.c_str());
+        LOG_INFOF(L"Parsed hostfxr options: hostfxr path: '%ls' arguments:",  hostFxrDllPath.c_str());
         for (size_t i = 0; i < arguments.size(); i++)
         {
             LOG_INFOF(L"Argument[%d] = '%ls'", i, arguments[i].c_str());
         }
-        ppWrapper = std::make_unique<HostFxrResolutionResult>(knownDotnetLocation, hostFxrDllPath, arguments);
+        ppWrapper = std::make_unique<HostFxrResolutionResult>( hostFxrDllPath, arguments);
     }
     catch (InvalidOperationException &ex)
     {
