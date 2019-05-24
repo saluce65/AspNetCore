@@ -35,9 +35,6 @@ public:
         bool                        expandDllPaths = false
     );
 
-    static
-    std::optional<std::filesystem::path>
-    GetAbsolutePathToDotnetFromProgramFiles();
 private:
 
     static
@@ -47,38 +44,8 @@ private:
     );
 
     static
-    VOID
-    FindDotNetFolders(
-        const std::filesystem::path& path,
-        std::vector<std::wstring> & pvFolders
-    );
-
-    static
-    std::wstring
-    FindHighestDotNetVersion(
-        std::vector<std::wstring> & vFolders
-    );
-
-    static
-    std::filesystem::path
-    GetAbsolutePathToHostFxr(
-        const std::filesystem::path & dotnetPath
-    );
-
-    static
     std::filesystem::path
     GetAbsolutePathToDotnetFromHostfxr(const std::filesystem::path& hostfxrPath);
-
-    static
-    std::optional<std::filesystem::path>
-    InvokeWhereToFindDotnet();
-
-    static
-    std::filesystem::path
-    GetAbsolutePathToDotnet(
-        const std::filesystem::path & applicationPath,
-        const std::filesystem::path & requestedPath
-    );
 
     struct LocalFreeDeleter
     {
