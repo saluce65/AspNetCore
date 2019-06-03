@@ -64,6 +64,7 @@ HandlerResolver::LoadRequestHandlerAssembly(const IHttpApplication &pApplication
                 pConfiguration.QueryProcessPath(),
                 pApplication.GetApplicationPhysicalPath(),
                 pConfiguration.QueryArguments(),
+                m_hModule,
                 options));
 
             location = options->GetDotnetExeLocation();

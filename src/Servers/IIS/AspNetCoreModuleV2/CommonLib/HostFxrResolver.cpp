@@ -12,6 +12,7 @@
 #include "StringHelpers.h"
 #include "RegistryKey.h"
 #include "ModuleHelpers.h"
+#include "GlobalVersionUtility.h"
 
 namespace fs = std::filesystem;
 
@@ -24,7 +25,8 @@ HostFxrResolver::GetHostFxrParameters(
     const std::wstring &applicationArguments,
     fs::path           &hostFxrDllPath,
     fs::path           &dotnetExePath,
-    std::vector<std::wstring> &arguments
+    std::vector<std::wstring> &arguments,
+    HMODULE            aspNetCoreModule
 )
 {
     LOG_INFOF(L"Resolving hostfxr parameters for application: '%ls' arguments: '%ls' path: '%ls'",
@@ -51,7 +53,11 @@ HostFxrResolver::GetHostFxrParameters(
     // call load dll and see what happens :)
     // TODO make sure we figure out a way to load this dll sxs
     // TODO error handling
-    auto moduleHandle = LoadLibrary(L"C:\\Users\\jukotali\\Downloads\\nethostbits\\nethost.dll");
+    std::wstring modulePath = GlobalVersionUtility::GetModuleName(aspNetCoreModule);
+
+    modulePath = GlobalVersionUtility::RemoveFileNameFromFolderPath(modulePath);
+
+    auto moduleHandle = LoadLibrary(modulePath.append(L"\\nethost.dll").c_str());
     auto getHostfxrPath = ModuleHelpers::GetKnownProcAddress<get_hostfxr_path>(moduleHandle, "get_hostfxr_path");
 
     // Check if the absolute path is to dotnet or not.

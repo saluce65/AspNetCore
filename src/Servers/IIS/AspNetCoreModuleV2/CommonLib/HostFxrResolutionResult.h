@@ -44,6 +44,7 @@ public:
          _In_  const std::wstring& pcwzProcessPath,
          _In_  const std::wstring& pcwzApplicationPhysicalPath,
          _In_  const std::wstring& pcwzArguments,
+        _In_ HMODULE aspNetCoreModule,
          _Out_ std::unique_ptr<HostFxrResolutionResult>& ppWrapper);
 
 private:

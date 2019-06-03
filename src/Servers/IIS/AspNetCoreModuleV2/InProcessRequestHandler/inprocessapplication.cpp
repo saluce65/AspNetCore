@@ -180,7 +180,7 @@ IN_PROCESS_APPLICATION::LoadManagedApplication(ErrorContext& errorContext)
         StopClr();
         throw InvalidOperationException(format(L"CLR worker thread exited prematurely"));
     }
-
+    
     THROW_IF_FAILED(StartMonitoringAppOffline());
 
     return S_OK;
@@ -202,6 +202,7 @@ IN_PROCESS_APPLICATION::ExecuteApplication()
                 m_pConfig->QueryProcessPath(),
                 QueryApplicationPhysicalPath(),
                 m_pConfig->QueryArguments(),
+                GetModuleHandle(TEXT("aspnetcorev2.dll")),
                 hostFxrResolutionResult
                 ));
 
