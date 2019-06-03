@@ -381,6 +381,11 @@
       <Uri>https://github.com/dotnet/core-setup</Uri>
       <Sha>63abc77da6d99470caa5bfa0465afe244105e595</Sha>
     </Dependency>
+    <Dependency Name="Microsoft.NETCore.DotNetAppHost" Version="">
+      <Uri>https://github.com/dotnet/core-setup</Uri>
+      <Sha>
+      </Sha>
+    </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Listed explicitly to workaround https://github.com/dotnet/cli/issues/10528 -->
