@@ -125,8 +125,7 @@
     <MicrosoftAspNetCoreRazorLanguagePackageVersion>3.0.0-preview6.19303.1</MicrosoftAspNetCoreRazorLanguagePackageVersion>
     <MicrosoftCodeAnalysisRazorPackageVersion>3.0.0-preview6.19303.1</MicrosoftCodeAnalysisRazorPackageVersion>
     <MicrosoftNETSdkRazorPackageVersion>3.0.0-preview6.19303.1</MicrosoftNETSdkRazorPackageVersion>
-    <MicrosoftNETCoreDotNetAppHostPackageVersion>
-    </MicrosoftNETCoreDotNetAppHostPackageVersion>
+    <MicrosoftNETCoreDotNetAppHostPackageVersion>3.0.0-preview6.19303.1</MicrosoftNETCoreDotNetAppHostPackageVersion>
   </PropertyGroup>
   <!--
 
