@@ -2513,6 +2513,7 @@ function navigateTo(uri, forceLoad) {
     else if (forceLoad && location.href === uri) {
         // Force-loading the same URL you're already on requires special handling to avoid
         // triggering browser-specific behavior issues.
+        // For details about what this fixes and why, see https://github.com/aspnet/AspNetCore/pull/10839
         var temporaryUri = uri + '?';
         history.replaceState(null, '', temporaryUri);
         window.location.replace(uri);
