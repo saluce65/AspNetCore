@@ -14950,7 +14950,7 @@ function navigateTo(uri, forceLoad) {
         // For details about what this fixes and why, see https://github.com/aspnet/AspNetCore/pull/10839
         var temporaryUri = uri + '?';
         history.replaceState(null, '', temporaryUri);
-        window.location.replace(uri);
+        location.replace(uri);
     }
     else {
         // It's either an external URL, or forceLoad is requested, so do a full page load
