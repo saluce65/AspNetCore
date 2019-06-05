@@ -39,9 +39,8 @@ namespace Microsoft.AspNetCore.RequestThrottling
 
             _next = next;
             _logger = loggerFactory.CreateLogger<RequestThrottlingMiddleware>();
-            _requestQueue = new RequestQueue(
-                options.Value.MaxConcurrentRequests.Value,
-                options.Value.RequestQueueLimit);
+            //_requestQueue = new CoDelQueue(options.Value.MaxConcurrentRequests.Value);
+            _requestQueue = new TailDrop(options.Value.MaxConcurrentRequests.Value, options.Value.RequestQueueLimit);
         }
 
         /// <summary>
@@ -52,23 +51,23 @@ namespace Microsoft.AspNetCore.RequestThrottling
         public async Task Invoke(HttpContext context)
         {
             var waitInQueueTask = _requestQueue.TryEnterQueueAsync();
-            if (waitInQueueTask.IsCompletedSuccessfully && !waitInQueueTask.Result)
+
+            if (waitInQueueTask.IsCompletedSuccessfully)
+            {
+                RequestThrottlingLog.RequestRunImmediately(_logger, ActiveRequestCount);
+            }
+            else
+            {
+                RequestThrottlingLog.RequestEnqueued(_logger, ActiveRequestCount);
+                await waitInQueueTask;
+                RequestThrottlingLog.RequestDequeued(_logger, ActiveRequestCount);
+            }
+
+            if (!waitInQueueTask.Result)
             {
                 RequestThrottlingLog.RequestRejectedQueueFull(_logger);
                 context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
                 return;
-            }
-            else if (!waitInQueueTask.IsCompletedSuccessfully)
-            {
-                RequestThrottlingLog.RequestEnqueued(_logger, ActiveRequestCount);
-                var result = await waitInQueueTask;
-                RequestThrottlingLog.RequestDequeued(_logger, ActiveRequestCount);
-
-                Debug.Assert(result);
-            }
-            else
-            {
-                RequestThrottlingLog.RequestRunImmediately(_logger, ActiveRequestCount);
             }
 
             try
@@ -85,7 +84,7 @@ namespace Microsoft.AspNetCore.RequestThrottling
         /// The number of requests currently on the server.
         /// Cannot exceeed the sum of <see cref="RequestThrottlingOptions.RequestQueueLimit"> and </see>/><see cref="RequestThrottlingOptions.MaxConcurrentRequests"/>.
         /// </summary>
-        internal int ActiveRequestCount
+        public int ActiveRequestCount
         {
             get => _requestQueue.TotalRequests;
         }
@@ -104,7 +103,7 @@ namespace Microsoft.AspNetCore.RequestThrottling
                 LoggerMessage.Define<int>(LogLevel.Debug, new EventId(3, "RequestRunImmediately"), "Below MaxConcurrentRequests limit, running request immediately. Current active requests: {ActiveRequests}");
 
             private static readonly Action<ILogger, Exception> _requestRejectedQueueFull =
-                LoggerMessage.Define(LogLevel.Debug, new EventId(4, "RequestRejectedQueueFull"), "Currently at the 'RequestQueueLimit', rejecting this request with a '503 server not availible' error");
+                LoggerMessage.Define(LogLevel.Debug, new EventId(4, "RequestRejectedQueueFull"), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Currently at the 'RequestQueueLimit', rejecting this request with a '503 server not availible' error");
 
             internal static void RequestEnqueued(ILogger logger, int activeRequests)
             {
